@@ -1,0 +1,21 @@
+<header class="header">
+  <div class="logo">MyApp</div>
+
+  <nav class="nav-links">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/about" routerLinkActive="active">About</a>
+    <a routerLink="/contact" routerLinkActive="active">Contact</a>
+  </nav>
+
+  <div class="auth-buttons">
+    <ng-container *ngIf="!isLoggedIn()">
+      <a routerLink="/login">Login</a>
+      <a routerLink="/register">Register</a>
+    </ng-container>
+
+    <ng-container *ngIf="isLoggedIn()">
+      <span class="username">{{ getUsername() }}</span>
+      <button (click)="logout()">Wyloguj</button>
+    </ng-container>
+  </div>
+</header>

@@ -1,0 +1,44 @@
+<div class="todo-wrapper">
+  <div class="todo-container">
+    <h2>📝 To-Do Lista</h2>
+
+    <div class="add-todo">
+      <input [(ngModel)]="newTodoTitle" placeholder="Nowe zadanie" (keyup.enter)="addTodo()" />
+      <button (click)="addTodo()">Dodaj</button>
+    </div>
+
+    <div class="filters">
+      <button (click)="setFilter('all')" [class.active]="filter==='all'">Wszystkie</button>
+      <button (click)="setFilter('active')" [class.active]="filter==='active'">Do zrobienia</button>
+      <button (click)="setFilter('completed')" [class.active]="filter==='completed'">Zrobione</button>
+    </div>
+
+
+    <ul class="todo-list">
+      <li *ngFor="let todo of todos | filterTodos:filter" class="todo-item">
+
+      <input type="checkbox" [checked]="todo.completed" (change)="toggleCompleted(todo)" />
+
+
+        <span *ngIf="editingId !== todo.id"
+              [class.completed]="todo.completed"
+              (click)="startEditing(todo)">
+    {{ todo.title }}
+  </span>
+        <input *ngIf="editingId === todo.id"
+               [(ngModel)]="editingTitle"
+               (blur)="saveEditing(todo)"
+               (keyup.enter)="saveEditing(todo)" />
+
+        <button (click)="deleteTodo(todo.id)">❌</button>
+      </li>
+
+    </ul>
+    <div class="import-export">
+      <button (click)="exportTodos()">Eksportuj</button>
+      <input type="file" (change)="importTodos($event)" accept=".json" />
+      <button (click)="clearAll()">Wyczyść listę</button>
+    </div>
+
+  </div>
+</div>

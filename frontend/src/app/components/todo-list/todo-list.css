@@ -1,0 +1,150 @@
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+
+}
+
+.todo-wrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+}
+
+.todo-container {
+  width: 360px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.todo-container h2 {
+  text-align: center;
+  margin: 0 0 15px 0;
+}
+
+.add-todo {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.add-todo input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.add-todo button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-todo button:hover {
+  background-color: #45a049;
+}
+
+.todo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.todo-item:last-child {
+  border-bottom: none;
+}
+
+span.completed {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.todo-item button {
+  background: none;
+  border: none;
+  color: #e53935;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.2s;
+}
+
+.todo-item button:hover {
+  color: #b71c1c;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filters button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.filters button:hover {
+  background-color: #d0d0d0;
+}
+
+.filters button.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.todo-item span {
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.todo-item span:hover {
+  background-color: #e0f7fa;
+  color: #00796b;
+}
+.import-export {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+  justify-content: center;
+}
+
+.import-export button,
+.import-export input[type="file"] {
+  flex: 1 1 100px;
+  max-width: 120px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.import-export button:hover {
+  background-color: #d0f0d0;
+}
+
+
+
