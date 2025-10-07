@@ -45,7 +45,7 @@ namespace WebApiAngular.Controllers
 
         }
 
-        // ✅ Logowanie 
+        //  Logowanie 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
@@ -57,7 +57,7 @@ namespace WebApiAngular.Controllers
             return Ok(new { token, username = user.Username, role = user.Role });
         }
 
-        // ✅ Generowanie tokena JWT
+        //  Generowanie tokena JWT
         private string GenerateJwtToken(User user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -67,8 +67,8 @@ namespace WebApiAngular.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim(ClaimTypes.Role, user.Role),
-                new Claim("role", user.Role), // dodatkowy claim dla frontu
-                new Claim("username", user.Username), // dodatkowy claim dla frontu
+                new Claim("role", user.Role), 
+                new Claim("username", user.Username), 
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -84,7 +84,7 @@ namespace WebApiAngular.Controllers
         }
         
 
-        // ✅ Tworzenie admina (POST bez body)
+        //  Tworzenie admina (POST bez body)
         [HttpPost("create-admin")]
         public async Task<IActionResult> CreateAdmin()
         {

@@ -8,18 +8,18 @@ using WebApiAngular.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 👉 1. Dodaj DbContext
+//   DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 👉 2. Dodaj kontrolery i Swaggera
+//  kontrolery i Swaggera
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSwaggerGen();
 
-// 👉 3. JWT config
+//  JWT config
 var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!);
 
 builder.Services.AddAuthentication(options =>
@@ -44,10 +44,10 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddSwaggerGen(c =>
 {
-    // Tutaj możesz mieć inne opcje Swaggera, np. opis
+    
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "My API", Version = "v1" });
 
-    // --- DODAJ TO ---
+    
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
@@ -70,13 +70,13 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-// Dodaj usługę CORS
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularDev",
         policy =>
         {
-            policy.WithOrigins("http://localhost:4200") // Twój frontend
+            policy.WithOrigins("http://localhost:4200") // front
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -85,7 +85,7 @@ builder.Services.AddCors(options =>
 
 
 
-// 👉 4. Role + autoryzacja
+//   Role + autoryzacja
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
@@ -93,7 +93,7 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
-// 👉 5. Swagger zawsze na devie
+//   Swagger zawsze na devie
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -102,7 +102,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAngularDev");
 app.UseHttpsRedirection();
 
-// 👉 6. Użycie autoryzacji i autentykacji
+//   Użycie autoryzacji i autentykacji
 app.UseAuthentication();
 app.UseAuthorization();
 

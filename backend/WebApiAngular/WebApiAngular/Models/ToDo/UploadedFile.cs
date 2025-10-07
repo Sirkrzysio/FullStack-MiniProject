@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace DefaultNamespace.ToDo;
 
 public class UploadedFile
@@ -8,5 +10,6 @@ public class UploadedFile
     public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
 
     public int UserId { get; set; }
+    [JsonIgnore]
     public User User { get; set; } = null!;
 }

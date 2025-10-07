@@ -54,41 +54,73 @@ namespace WebApiAngular.Controllers.TodoControllers
 
         // POST: api/Todo/mytodos
         [HttpPost("mytodos")]
-        public async Task<IActionResult> CreateMyTodo([FromBody] TodoItem todo)
+        public async Task<IActionResult> CreateMyTodo([FromBody] TodoItemDto dto)
         {
-            todo.UserId = GetCurrentUserId();
+            var userId = GetCurrentUserId();
+
+            var todo = new TodoItem
+            {
+                Title = dto.Title,
+                Completed = dto.Completed,
+                CreatedAt = DateTime.UtcNow,
+                UserId = userId
+            };
+
             _context.TodoItems.Add(todo);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetMyTodos), new { id = todo.Id }, todo);
+
+            var resultDto = new TodoItemDto
+            {
+                Id = todo.Id,
+                Title = todo.Title,
+                Completed = todo.Completed
+            };
+
+            return CreatedAtAction(nameof(GetMyTodos), new { id = todo.Id }, resultDto);
         }
+
 
         // PUT: api/Todo/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] TodoItem todo)
+        public async Task<IActionResult> Update(int id, [FromBody] TodoItemDto dto)
         {
             var userId = GetCurrentUserId();
+
+           
             var existing = await _context.TodoItems
                 .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
-            if (existing == null) return NotFound();
 
-            existing.Title = todo.Title;
-            existing.Completed = todo.Completed;
+            if (existing == null)
+                return NotFound(); 
+
+            // aktualizacja pól
+            existing.Title = dto.Title;
+            existing.Completed = dto.Completed;
+
             await _context.SaveChangesAsync();
-            return NoContent();
+
+            return NoContent(); 
         }
+
 
         // DELETE: api/Todo/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var userId = GetCurrentUserId();
+
+            
             var existing = await _context.TodoItems
                 .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
-            if (existing == null) return NotFound();
+
+            if (existing == null)
+                return NotFound(); 
 
             _context.TodoItems.Remove(existing);
             await _context.SaveChangesAsync();
-            return NoContent();
+
+            return NoContent(); 
         }
+
     }
 }

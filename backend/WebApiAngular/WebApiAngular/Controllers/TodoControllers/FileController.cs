@@ -10,7 +10,7 @@ namespace WebApiAngular.Controllers.TodoControllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize] // tylko zalogowani
+[Authorize] 
 public class FilesController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -82,7 +82,7 @@ public class FilesController : ControllerBase
         var todos = todoDtos.Select(dto => new TodoItem
         {
             Title = dto.Title,
-            Completed = dto.Completed, // <- poprawione
+            Completed = dto.Completed, 
             UserId = userId,
             CreatedAt = DateTime.UtcNow
         }).ToList();

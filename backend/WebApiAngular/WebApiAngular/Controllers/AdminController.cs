@@ -7,7 +7,7 @@ namespace WebApiAngular.Controllers
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
     {
-        // ✅ Endpoint tylko dla admina
+       
         [HttpGet("secret")]
         [Authorize(Roles = "Admin")]
         public IActionResult GetSecret()
