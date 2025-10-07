@@ -1,9 +1,8 @@
-
 body, html {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-
+  background-color: #f4f6f8;
 }
 
 .todo-wrapper {
@@ -13,16 +12,19 @@ body, html {
 }
 
 .todo-container {
-  width: 360px;
-  padding: 20px;
-  background-color: #fff;
+  width: 380px;
+  padding: 25px;
+  background-color: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
 .todo-container h2 {
   text-align: center;
-  margin: 0 0 15px 0;
+  margin: 0 0 20px 0;
+  color: #007bff;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .add-todo {
@@ -33,23 +35,32 @@ body, html {
 
 .add-todo input {
   flex: 1;
-  padding: 8px;
+  padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.add-todo input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
 }
 
 .add-todo button {
-  padding: 8px 12px;
+  padding: 10px 14px;
   border: none;
   border-radius: 6px;
-  background-color: #4caf50;
+  background-color: #007bff;
   color: white;
   cursor: pointer;
+  font-weight: 600;
   transition: background 0.2s;
 }
 
 .add-todo button:hover {
-  background-color: #45a049;
+  background-color: #0056b3;
 }
 
 .todo-list {
@@ -62,8 +73,14 @@ body, html {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 8px;
+  padding: 8px 10px;
   border-bottom: 1px solid #eee;
+  color: #000; /* główny kolor todo */
+  transition: background 0.2s;
+}
+
+.todo-item:hover {
+  background-color: #f8f9fa; /* subtelne zaznaczenie */
 }
 
 .todo-item:last-child {
@@ -72,44 +89,47 @@ body, html {
 
 span.completed {
   text-decoration: line-through;
-  color: #888;
+  color: #999;
 }
 
 .todo-item button {
   background: none;
   border: none;
-  color: #e53935;
+  color: #dc3545;
   cursor: pointer;
-  font-size: 16px;
-  transition: color 0.2s;
+  font-size: 18px;
+  transition: color 0.2s, transform 0.2s;
 }
 
 .todo-item button:hover {
   color: #b71c1c;
+  transform: scale(1.15);
 }
 
 .filters {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 15px;
+  margin: 20px 0;
 }
 
 .filters button {
-  padding: 6px 12px;
+  padding: 8px 14px;
   border: none;
   border-radius: 6px;
   background-color: #e0e0e0;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  font-size: 0.9rem;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
 .filters button:hover {
   background-color: #d0d0d0;
+  transform: translateY(-1px);
 }
 
 .filters button.active {
-  background-color: #4caf50;
+  background-color: #007bff;
   color: white;
 }
 
@@ -121,9 +141,10 @@ span.completed {
 }
 
 .todo-item span:hover {
-  background-color: #e0f7fa;
-  color: #00796b;
+  background-color: #e7f1ff;
+  color: #007bff;
 }
+
 .import-export {
   display: flex;
   flex-wrap: wrap;
@@ -135,16 +156,17 @@ span.completed {
 .import-export button,
 .import-export input[type="file"] {
   flex: 1 1 100px;
-  max-width: 120px;
-  padding: 6px 12px;
+  max-width: 140px;
+  padding: 8px 12px;
   border-radius: 6px;
   border: 1px solid #ccc;
   cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s, border-color 0.2s;
 }
 
-.import-export button:hover {
-  background-color: #d0f0d0;
+.import-export button:hover,
+.import-export input[type="file"]:hover {
+  background-color: #e7f1ff;
+  border-color: #007bff;
 }
-
-
-

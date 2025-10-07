@@ -1,43 +1,132 @@
+/* ====== Shared form styles - login & register ====== */
+
 .register-container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 25px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-}
-
-.register-container h2 {
+  max-width: 420px;
+  margin: 48px auto;
+  padding: 28px;
+  background: linear-gradient(180deg, #ffffff, #fbfdff);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.08);
   text-align: center;
-  margin-bottom: 20px;
-  color: #007bff;
+  font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
 }
 
+/* heading */
+.register-container h2 {
+  margin: 0 0 18px;
+  font-size: 1.5rem;
+  color: #16202a;
+  font-weight: 700;
+}
+
+/* form layout */
 .register-container form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 14px;
 }
 
+/* inputs */
 .register-container input {
-  padding: 8px 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d8dbe0;
+  font-size: 1rem;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .08s ease;
+  background: #fff;
 }
 
+.register-container input:focus {
+  border-color: #3b82f6; /* niebieski focus */
+  box-shadow: 0 6px 14px rgba(59,130,246,0.12);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+/* buttons */
 .register-container button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
+  padding: 12px;
   border: none;
-  font-weight: bold;
+  border-radius: 10px;
+  background-color: #0b73d7;
+  color: #fff;
+  font-weight: 700;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background 0.2s;
+  transition: background-color .18s, transform .12s;
+  box-shadow: 0 6px 14px rgba(11,115,215,0.12);
 }
 
-.register-container button:hover {
-  background-color: #0056b3;
+.register-container button:hover:not(:disabled) {
+  background-color: #095fae;
+  transform: translateY(-2px);
+}
+
+.register-container button:disabled {
+  background-color: #cdd6e0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* message area: hidden when empty, animated when appears */
+.register-container p {
+  margin-top: 14px;
+  min-height: 24px; /* zapobiega skokom layoutu gdy wiadomość przychodzi */
+  font-weight: 600;
+  line-height: 1.2;
+  transition: opacity .25s ease, transform .25s ease;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+}
+
+/* gdy p ma treść - pokaż je jako ładny box */
+.register-container p:not(:empty) {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  display: block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+  margin-top: 18px;
+  text-align: center;
+}
+
+/* Domyślny (neutralny/sukcesowy) wygląd wiadomości - delikatnie zielonkawy */
+.register-container p:not(:empty) {
+  background: linear-gradient(180deg, #f7fffb, #e9f8ea);
+  color: #0f5132;
+  border: 1px solid rgba(15,81,50,0.08);
+}
+
+/* Hack: wyróżnij pierwszą literę (np. emoji ✅ / ❌) - będzie wizualnie czytelne */
+.register-container p:not(:empty)::first-letter {
+  font-size: 1.25rem;
+  margin-right: 8px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Opcjonalne klasy (tylko gdy kiedyś będziesz chciał dodać klasy z TS/HTML) */
+.register-container p.success {
+  background: linear-gradient(180deg, #f7fffb, #e9f8ea);
+  color: #0f5132;
+  border: 1px solid rgba(15,81,50,0.08);
+}
+
+.register-container p.error {
+  background: linear-gradient(180deg, #fff5f5, #ffecec);
+  color: #7a1616;
+  border: 1px solid rgba(122,22,22,0.06);
+}
+
+/* responsywność */
+@media (max-width: 520px) {
+  .register-container {
+    margin: 28px 16px;
+    padding: 20px;
+  }
+  .register-container h2 { font-size: 1.25rem; }
+  .register-container input, .register-container button { font-size: 0.97rem; padding: 10px 12px; }
 }
