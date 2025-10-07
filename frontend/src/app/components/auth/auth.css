@@ -1,4 +1,4 @@
-/* ====== Shared form styles - login & register ====== */
+
 
 .register-container {
   max-width: 420px;
@@ -37,7 +37,7 @@
 }
 
 .register-container input:focus {
-  border-color: #3b82f6; /* niebieski focus */
+  border-color: #3b82f6;
   box-shadow: 0 6px 14px rgba(59,130,246,0.12);
   outline: none;
   transform: translateY(-1px);
@@ -71,7 +71,7 @@
 /* message area: hidden when empty, animated when appears */
 .register-container p {
   margin-top: 14px;
-  min-height: 24px; /* zapobiega skokom layoutu gdy wiadomość przychodzi */
+  min-height: 24px;
   font-weight: 600;
   line-height: 1.2;
   transition: opacity .25s ease, transform .25s ease;
@@ -93,14 +93,14 @@
   text-align: center;
 }
 
-/* Domyślny (neutralny/sukcesowy) wygląd wiadomości - delikatnie zielonkawy */
+
 .register-container p:not(:empty) {
   background: linear-gradient(180deg, #f7fffb, #e9f8ea);
   color: #0f5132;
   border: 1px solid rgba(15,81,50,0.08);
 }
 
-/* Hack: wyróżnij pierwszą literę (np. emoji ✅ / ❌) - będzie wizualnie czytelne */
+
 .register-container p:not(:empty)::first-letter {
   font-size: 1.25rem;
   margin-right: 8px;
@@ -108,7 +108,7 @@
   vertical-align: middle;
 }
 
-/* Opcjonalne klasy (tylko gdy kiedyś będziesz chciał dodać klasy z TS/HTML) */
+
 .register-container p.success {
   background: linear-gradient(180deg, #f7fffb, #e9f8ea);
   color: #0f5132;

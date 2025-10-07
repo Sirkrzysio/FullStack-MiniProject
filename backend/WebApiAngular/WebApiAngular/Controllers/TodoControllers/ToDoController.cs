@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiAngular.Data;
+using WebApiAngular.Dtos;
 
 namespace WebApiAngular.Controllers.TodoControllers
 {
@@ -17,42 +18,61 @@ namespace WebApiAngular.Controllers.TodoControllers
             _context = context;
         }
 
-        // GET: api/Todo
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        // Pobranie aktualnego użytkownika po claimie "username"
+        private int GetCurrentUserId()
         {
-            var todos = await _context.TodoItems.ToListAsync();
+            var username = User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
+            if (string.IsNullOrEmpty(username))
+                throw new Exception("User not found");
+
+            var user = _context.Users.FirstOrDefault(u => u.Username == username);
+            if (user == null)
+                throw new Exception("User not found");
+
+            return user.Id;
+        }
+
+        // GET: api/Todo/mytodos
+        [HttpGet("mytodos")]
+        public async Task<IActionResult> GetMyTodos()
+        {
+            var userId = GetCurrentUserId();
+
+            var todos = await _context.TodoItems
+                .Where(t => t.UserId == userId)
+                .OrderByDescending(t => t.CreatedAt)
+                .Select(t => new TodoItemDto
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    Completed = t.Completed
+                })
+                .ToListAsync();
+
             return Ok(todos);
         }
 
-        // GET: api/Todo/{id}
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        // POST: api/Todo/mytodos
+        [HttpPost("mytodos")]
+        public async Task<IActionResult> CreateMyTodo([FromBody] TodoItem todo)
         {
-            var todo = await _context.TodoItems.FindAsync(id);
-            if (todo == null) return NotFound();
-            return Ok(todo);
-        }
-
-        // POST: api/Todo
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TodoItem todo)
-        {
+            todo.UserId = GetCurrentUserId();
             _context.TodoItems.Add(todo);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = todo.Id }, todo);
+            return CreatedAtAction(nameof(GetMyTodos), new { id = todo.Id }, todo);
         }
 
         // PUT: api/Todo/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] TodoItem todo)
         {
-            var existing = await _context.TodoItems.FindAsync(id);
+            var userId = GetCurrentUserId();
+            var existing = await _context.TodoItems
+                .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
             if (existing == null) return NotFound();
 
             existing.Title = todo.Title;
-            existing.IsCompleted = todo.IsCompleted;
-
+            existing.Completed = todo.Completed;
             await _context.SaveChangesAsync();
             return NoContent();
         }
@@ -61,10 +81,12 @@ namespace WebApiAngular.Controllers.TodoControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var todo = await _context.TodoItems.FindAsync(id);
-            if (todo == null) return NotFound();
+            var userId = GetCurrentUserId();
+            var existing = await _context.TodoItems
+                .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
+            if (existing == null) return NotFound();
 
-            _context.TodoItems.Remove(todo);
+            _context.TodoItems.Remove(existing);
             await _context.SaveChangesAsync();
             return NoContent();
         }

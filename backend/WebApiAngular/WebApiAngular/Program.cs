@@ -15,6 +15,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // 👉 2. Dodaj kontrolery i Swaggera
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddSwaggerGen();
 
 // 👉 3. JWT config
