@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TodoService} from '../../services/todo.service';
 import {TodoItem} from '../../models/todo-item';
 import {FilterTodosPipe} from '../../pipes/filter-todos.pipe';
+import {FileUploadService} from '../../services/FileUploadService';
 
 @Component({
   selector: 'app-todo-list',
@@ -12,56 +13,48 @@ import {FilterTodosPipe} from '../../pipes/filter-todos.pipe';
   templateUrl: './todo-list.html',
   styleUrl: './todo-list.css'
 })
-export class TodoListComponent {
+export class TodoListComponent implements OnInit {
   todos: TodoItem[] = [];
   newTodoTitle = '';
+  filter: 'all' | 'active' | 'completed' = 'all';
+  editingId: number | null = null;
+  editingTitle = '';
 
-  // Wstrzykujemy serwis
-  constructor(private todoService: TodoService) {
+  constructor(
+    private todoService: TodoService,
+    private fileService: FileUploadService
+  ) {}
+
+  ngOnInit() {
     this.loadTodos();
   }
 
-  // Pobierz listę z serwisu/localStorage
   loadTodos() {
-    this.todos = this.todoService.getTodos();
+    this.todoService.getMyTodos().subscribe({
+      next: todos => this.todos = todos,
+      error: err => console.error('Błąd pobierania todos', err)
+    });
   }
 
-  // Dodaj nowe zadanie
   addTodo() {
     const title = this.newTodoTitle.trim();
     if (!title) return;
 
-    const newTodo: TodoItem = {
-      id: Date.now(),
-      title,
-      completed: false
-    };
-
-    this.todoService.addTodo(newTodo);
-    this.newTodoTitle = '';
-    this.loadTodos();
+    this.todoService.addTodo({ title, completed: false }).subscribe({
+      next: () => {
+        this.newTodoTitle = '';
+        this.loadTodos();
+      },
+      error: err => console.error('Błąd dodawania todo', err)
+    });
   }
 
-  // Toggle completed
   toggleCompleted(todo: TodoItem) {
-    this.todoService.toggleCompleted(todo.id);
-    this.loadTodos();
+    this.todoService.updateTodo(todo.id, { completed: !todo.completed }).subscribe({
+      next: () => this.loadTodos(),
+      error: err => console.error('Błąd aktualizacji todo', err)
+    });
   }
-
-  // Usuń zadanie
-  deleteTodo(id: number) {
-    this.todoService.deleteTodo(id);
-    this.loadTodos();
-  }
-
-  filter: 'all' | 'active' | 'completed' = 'all';
-
-  setFilter(type: 'all' | 'active' | 'completed') {
-    this.filter = type;
-  }
-
-  editingId: number | null = null;
-  editingTitle: string = '';
 
   startEditing(todo: TodoItem) {
     this.editingId = todo.id;
@@ -70,11 +63,45 @@ export class TodoListComponent {
 
   saveEditing(todo: TodoItem) {
     const title = this.editingTitle.trim();
-    if (title) {
-      todo.title = title;
-      this.todoService.updateTodo(todo);
-    }
-    this.editingId = null;
+    if (!title) return;
+
+    this.todoService.updateTodo(todo.id, { title, completed: todo.completed }).subscribe({
+      next: () => {
+        this.editingId = null;
+        this.editingTitle = '';
+        this.loadTodos();
+      },
+      error: err => console.error('Błąd zapisu edycji', err)
+    });
+  }
+
+  deleteTodo(id: number) {
+    if (!confirm('Czy na pewno chcesz usunąć to zadanie?')) return;
+
+    this.todoService.deleteTodo(id).subscribe({
+      next: () => this.loadTodos(),
+      error: err => console.error('Błąd usuwania todo', err)
+    });
+  }
+
+  setFilter(type: 'all' | 'active' | 'completed') {
+    this.filter = type;
+  }
+
+  importTodos(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    this.fileService.uploadFile(file).subscribe({
+      next: res => {
+        alert(`${res.count} todo dodano z pliku!`);
+        this.loadTodos();
+      },
+      error: err => {
+        console.error('Błąd importu', err);
+        alert('Nie udało się zaimportować pliku');
+      }
+    });
   }
 
   exportTodos() {
@@ -90,30 +117,22 @@ export class TodoListComponent {
     URL.revokeObjectURL(url);
   }
 
-  importTodos(event: any) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      try {
-        const imported: TodoItem[] = JSON.parse(e.target.result);
-        // można dodać walidację
-        imported.forEach(todo => this.todoService.addTodo(todo));
-        this.todos = this.todoService.getTodos();
-      } catch (err) {
-        console.error('Błąd przy imporcie', err);
-        alert('Nieprawidłowy plik JSON');
-      }
-    };
-    reader.readAsText(file);
-  }
   clearAll() {
     if (!confirm('Czy na pewno chcesz wyczyścić wszystkie zadania?')) return;
 
-    this.todos = [];
-    this.todoService.clearTodos();
-  }
+    const ids = this.todos.map(t => t.id);
+    const requests = ids.map(id => this.todoService.deleteTodo(id));
 
+    // Subskrybujemy ostatni request i odświeżamy listę
+    if (requests.length > 0) {
+      requests[requests.length - 1].subscribe({
+        next: () => this.loadTodos(),
+        error: err => console.error('Błąd usuwania', err)
+      });
+
+      
+      requests.slice(0, -1).forEach(req => req.subscribe({ error: err => console.error('Błąd usuwania', err) }));
+    }
+  }
 
 }

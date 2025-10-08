@@ -35,7 +35,7 @@
 .nav-links a:hover,
 .nav-links a.active {
   text-decoration: underline;
-  color: #ffeb3b; /* lekko kontrastowy kolor na hover */
+  color: #ffeb3b;
 }
 
 .auth-buttons {

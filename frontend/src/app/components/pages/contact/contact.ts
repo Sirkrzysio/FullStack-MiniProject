@@ -14,7 +14,7 @@ export class Contact {
   contact: ContactModel = { name: '', email: '', message: '' };
 
   sendMessage() {
-    console.log(this.contact); // później wyślesz do backendu
+    console.log(this.contact);
     alert(`Thank you, ${this.contact.name}! Your message has been received.`);
     this.contact = { name: '', email: '', message: '' }; // reset formularza
   }

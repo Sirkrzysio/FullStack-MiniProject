@@ -1,63 +1,41 @@
 import { Injectable } from '@angular/core';
 import { TodoItem } from '../models/todo-item';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
-  private storageKey = 'todos';
+  private apiUrl = 'http://localhost:5187/api/Todo';
 
-  // Prywatna tablica w pamięci serwisu
-  private todos: TodoItem[] = [];
+  constructor(private http: HttpClient) {}
 
-  constructor() {
-
-    const data = localStorage.getItem(this.storageKey);
-    this.todos = data ? JSON.parse(data) : [];
+  private getHeaders() {
+    const token = localStorage.getItem('token'); // JWT z logowania
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
   }
 
-  // Pobierz listę zadań
-  getTodos(): TodoItem[] {
-    return this.todos;
+  // GET /api/Todo/mytodos
+  getMyTodos(): Observable<TodoItem[]> {
+    return this.http.get<TodoItem[]>(`${this.apiUrl}/mytodos`, { headers: this.getHeaders() });
   }
 
-  // Zapisz listę do localStorage
-  private saveTodos() {
-    localStorage.setItem(this.storageKey, JSON.stringify(this.todos));
+  // POST /api/Todo/mytodos
+  addTodo(todo: Partial<TodoItem>): Observable<TodoItem> {
+    return this.http.post<TodoItem>(`${this.apiUrl}/mytodos`, todo, { headers: this.getHeaders() });
   }
 
-  // Dodaj nowe zadanie
-  addTodo(todo: TodoItem) {
-    this.todos.push(todo);
-    this.saveTodos();
+  // PUT /api/Todo/{id}
+  updateTodo(id: number, updated: Partial<TodoItem>): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}`, updated, { headers: this.getHeaders() });
   }
 
-  // Usuń zadanie
-  deleteTodo(id: number) {
-    this.todos = this.todos.filter(t => t.id !== id);
-    this.saveTodos();
+  // DELETE /api/Todo/{id}
+  deleteTodo(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
-
-  // Przełącz completed
-  toggleCompleted(id: number) {
-    const todo = this.todos.find(t => t.id === id);
-    if (todo) {
-      todo.completed = !todo.completed;
-      this.saveTodos();
-    }
-  }
-
-  // Aktualizuj zadanie
-  updateTodo(updatedTodo: TodoItem) {
-    const index = this.todos.findIndex(t => t.id === updatedTodo.id);
-    if (index > -1) {
-      this.todos[index] = updatedTodo;
-      this.saveTodos();
-    }
-  }
-  clearTodos() {
-    this.todos = [];
-    localStorage.removeItem(this.storageKey);
-  }
-
 }

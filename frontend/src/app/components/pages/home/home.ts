@@ -3,6 +3,7 @@ import {TodoListComponent} from '../../todo-list/todo-list';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [
     TodoListComponent
   ],

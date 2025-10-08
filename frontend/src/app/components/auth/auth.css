@@ -80,7 +80,7 @@
   pointer-events: none;
 }
 
-/* gdy p ma treść - pokaż je jako ładny box */
+
 .register-container p:not(:empty) {
   opacity: 1;
   transform: translateY(0);
