@@ -50,7 +50,8 @@ export class TodoListComponent implements OnInit {
   }
 
   toggleCompleted(todo: TodoItem) {
-    this.todoService.updateTodo(todo.id, { completed: !todo.completed }).subscribe({
+    const updatedTodo = { ...todo, completed: !todo.completed }; // kopiujemy wszystkie pola i zmieniamy completed
+    this.todoService.updateTodo(todo.id, updatedTodo).subscribe({
       next: () => this.loadTodos(),
       error: err => console.error('Błąd aktualizacji todo', err)
     });
@@ -130,7 +131,7 @@ export class TodoListComponent implements OnInit {
         error: err => console.error('Błąd usuwania', err)
       });
 
-      
+
       requests.slice(0, -1).forEach(req => req.subscribe({ error: err => console.error('Błąd usuwania', err) }));
     }
   }

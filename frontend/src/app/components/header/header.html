@@ -5,6 +5,7 @@
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
     <a routerLink="/about" routerLinkActive="active">About</a>
     <a routerLink="/contact" routerLinkActive="active">Contact</a>
+    <a routerLink="/admin" routerLinkActive="active" *ngIf="userService.currentUser?.role === 'Admin'">Admin</a>
   </nav>
 
   <div class="auth-buttons">

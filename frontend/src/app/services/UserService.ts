@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-
-
-export interface User {
-  username: string;
-  role: string;
-}
+import {User} from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -15,9 +10,11 @@ export class UserService {
   loadUser(username: string, role: string) {
     this.userSubject.next({ username, role });
   }
-
   clearUser() {
     this.userSubject.next(null);
+  }
+  get currentUser(): User | null {
+    return this.userSubject.getValue();
   }
 }
 

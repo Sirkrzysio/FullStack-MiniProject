@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
-import {User, UserService} from '../../services/UserService';
+import {UserService} from '../../services/UserService';
+import {User} from '../../models/user.model';
 
 @Component({
   selector: 'app-header',

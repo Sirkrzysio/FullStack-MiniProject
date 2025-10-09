@@ -1,0 +1,40 @@
+.admin-panel {
+  padding: 20px;
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  .error {
+    color: red;
+    margin-bottom: 10px;
+  }
+
+  .users-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    .delete-btn {
+      background-color: #ff4d4f;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+
+      &:hover {
+        background-color: #ff7875;
+      }
+    }
+  }
+}
