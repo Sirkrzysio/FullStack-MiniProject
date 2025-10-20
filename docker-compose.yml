@@ -1,0 +1,23 @@
+﻿services:
+  webapi:
+    build:
+      context: ./backend/WebApiAngular/WebApiAngular
+    container_name: webapiangular_dev
+    ports:
+      - "5187:5187"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ./backend/WebApiAngular/WebApiAngular/app.db:/app/app.db
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: angular_dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - webapi

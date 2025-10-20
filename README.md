@@ -7,7 +7,7 @@ Full-stack CRUD application built with **Angular 20** (standalone components) an
 - 🌐 **SQLite** as the database (lightweight & easy to set up)
 - 🧠 Clean service structure and interceptors
 - 💅 Responsive UI with modern CSS
-
+- 🐳 Dockerized frontend & backend for easy setup
 ---
 
 ## 🚀 Tech Stack
@@ -27,7 +27,9 @@ Full-stack CRUD application built with **Angular 20** (standalone components) an
 **Database**
 - SQLite — no setup required, auto-creates DB file.
 
+**Containerization**
 
+- Docker + Docker Compose for full-stack setup
 
 ---
 
@@ -85,4 +87,22 @@ Frontend działa pod:
 
 🌐 Wszystkie kolejne zapytania wysyłają token przez interceptor
 
+```
+### 🐳 Installation & Setup (Docker)
+### Clone the repository
+```
+git clone https://github.com/Sirkrzysio/FullStack-MiniProject
+cd FullStack-MiniProject
 
+ Start full stack with Docker Compose
+docker-compose up --build -d
+
+
+This will build both frontend and backend images from Dockerfile and start containers.
+
+Frontend → http://localhost:4200
+
+Backend → http://localhost:5187
+
+Swagger UI → http://localhost:5187/swagger
+```
